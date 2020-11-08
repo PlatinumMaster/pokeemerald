@@ -53,6 +53,7 @@ static int s_blockCount = 0;
 static int s_minNote;
 static int s_maxNote;
 static int s_runningStatus;
+static bool g_hasTempoTrack;
 
 void Seek(long offset)
 {
@@ -128,7 +129,7 @@ std::uint32_t ReadVLQ()
     return val;
 }
 
-void ReadMidiFileHeader()
+void ReadMidiFileHeader(bool hasTempoTrack)
 {
     Seek(0);
 
@@ -151,6 +152,8 @@ void ReadMidiFileHeader()
 
     if (g_midiTimeDiv < 0)
         RaiseError("unsupported MIDI time division (%d)", g_midiTimeDiv);
+
+    g_hasTempoTrack = hasTempoTrack;
 }
 
 long ReadMidiTrackHeader(long offset)
@@ -918,7 +921,7 @@ void ReadMidiTracks()
     long trackHeaderStart = 14;
 
     long size = ReadMidiTrackHeader(trackHeaderStart);
-    if (g_midiFormat == (MidiFormat)0x1)
+    if (g_hasTempoTrack)
     {
         ReadMidiTrackHeader(trackHeaderStart+size);
         ReadSeqEvents();

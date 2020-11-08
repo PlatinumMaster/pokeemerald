@@ -73,7 +73,7 @@ struct Event
     }
 };
 
-void ReadMidiFileHeader();
+void ReadMidiFileHeader(bool hasTempoTrack);
 void ReadMidiTracks();
 
 extern int g_midiChan;

@@ -41,6 +41,7 @@ int g_reverb = -1;
 int g_clocksPerBeat = 1;
 bool g_exactGateTime = false;
 bool g_compressionEnabled = true;
+bool g_hasTempoTrack = false;
 
 [[noreturn]] static void PrintUsage()
 {
@@ -181,6 +182,9 @@ int main(int argc, char** argv)
             case 'X':
                 g_clocksPerBeat = 2;
                 break;
+            case 'T':
+                g_hasTempoTrack = true;
+                break;
             default:
                 PrintUsage();
             }
@@ -221,7 +225,7 @@ int main(int argc, char** argv)
     if (g_outputFile == nullptr)
         RaiseError("failed to open \"%s\" for writing", outputFilename.c_str());
 
-    ReadMidiFileHeader();
+    ReadMidiFileHeader(g_hasTempoTrack);
     PrintAgbHeader();
     ReadMidiTracks();
     PrintAgbFooter();
