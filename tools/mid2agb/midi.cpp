@@ -917,7 +917,12 @@ void ReadMidiTracks()
 {
     long trackHeaderStart = 14;
 
-    ReadMidiTrackHeader(trackHeaderStart);
+    long size = ReadMidiTrackHeader(trackHeaderStart);
+    if (g_midiFormat == (MidiFormat)0x1)
+    {
+        ReadMidiTrackHeader(trackHeaderStart+size);
+        ReadSeqEvents();
+    }
     ReadSeqEvents();
 
     g_agbTrack = 1;
